@@ -6,7 +6,8 @@ function useLocalStorage<T>(
 ): [storageValue: T, setValue: (value: T) => void] {
   const [storageValue, setStorageValue] = useState<T>(() => {
     let value = localStorage.getItem(name);
-    let data: T = value !== null ? JSON.parse(value) : initalValue;
+    let data: T = (value !== null && value !== undefined) ? JSON.parse(value) : initalValue;
+
     return data;
   });
   const setValue = (value: T): void => {

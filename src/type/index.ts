@@ -16,7 +16,6 @@ export interface WeatherInterface {
 }
 
 export interface CityInterface extends CoordInterface {
-    id : number;
     name : string;
 }
 

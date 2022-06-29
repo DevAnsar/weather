@@ -12,9 +12,9 @@ import useWeather, {
   useCity,
   useSetCity,
   cities,
-  defaultCity,
 } from "./hooks/useWeather";
 import { iconMaker } from "./utils/helper";
+import DarkModeToggleButton from "./components/tools/DarkModeToggleButton";
 import { Dialog, Transition, Combobox } from "@headlessui/react";
 import type { CityInterface } from "./type";
 
@@ -24,7 +24,36 @@ function App() {
   const weather = useWeather();
   const [cityModal, setCityModal] = useState<boolean>(false);
 
-  const handleToDefaultCity = () => setCity(defaultCity);
+  // const handleToDefaultCity = () => setCity(defaultCity);
+  const handleGoMyLocation = () => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    function error(err: any) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    if (navigator)
+      navigator.geolocation.getCurrentPosition(
+        (pos: any) => {
+          const crd = pos.coords;
+          setCity({
+            name: "My location",
+            lat: crd.latitude,
+            lon: crd.longitude,
+          });
+          // console.log('Your current position is:');
+          // console.log(`Latitude : ${crd.latitude}`);
+          // console.log(`Longitude: ${crd.longitude}`);
+          // console.log(`More or less ${crd.accuracy} meters.`);
+        },
+        error,
+        options
+      );
+  };
 
   return (
     <>
@@ -33,61 +62,74 @@ function App() {
         setIsOpen={setCityModal}
         selectedCity={city}
       />
-      <div className="h-screen w-screen grid grid-cols-1 grid-rows-8 bg-gradient-to-b from-white  to-cyan-200">
+      <div className="h-screen w-screen grid grid-cols-1 grid-rows-8 bg-gradient-to-b from-white dark:from-slate-800  to-cyan-200 dark:to-black">
         <header className="col-span-1 row-span-1 px-5">
-          <div className=" flex flex-row h-full">
-            <div className="flex item-center">
-              <MenuIcon className="w-8 text-teal-600 dark:text-slate-50" />
+          <div className=" flex justify-between items-center self-center h-full">
+            <div className=" flex flex-row ">
+              <div className="flex item-center">
+                <MenuIcon className="w-8 text-teal-600 dark:text-slate-50" />
+              </div>
+              <div className="flex items-center">
+                <a
+                  href="https://ansarmirzayi.ir"
+                  className="text-teal-600 dark:text-slate-50 text-lg mx-5"
+                >
+                  Wheather
+                </a>
+              </div>
             </div>
-            <div className="flex items-center">
-              <a
-                href="https://ansarmirzayi.ir"
-                className="text-teal-600 dark:text-slate-50 text-lg mx-5"
-              >
-                Wheather
-              </a>
-            </div>
+            <DarkModeToggleButton />
           </div>
         </header>
 
         <div className="col-span-1 row-span-4 px-5">
           <div className=" flex flex-col h-full">
             <div className="flex justify-center mt-10">
-              {/* http://openweathermap.org/img/wn/${weather.icon}@2x.png */}
+              {/* <img src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`} alt="" className="w-48 h-48" /> */}
               <img src={iconMaker(weather.icon)} alt="" className="w-48 h-48" />
             </div>
             <div className="flex justify-center mt-5">
-              <LocationMarkerIcon className="w-6 text-orange-500" />
-              <span className="text-orange-500 text-2xl font-bold">
+              <LocationMarkerIcon className="w-6 text-orange-500 dark:text-yellow-600" />
+              <span className="text-orange-500 dark:text-yellow-600 text-2xl font-bold">
                 {weather.name}
               </span>
             </div>
             <div className="flex justify-center mt-1">
-              <span className="text-teal-600 text-7xl">{weather.temp}°C</span>
+              <span className="text-teal-600 dark:text-slate-50 text-7xl">
+                {weather.temp}°C
+              </span>
             </div>
             <div className="flex justify-center mt-2">
-              <span className="text-orange-500 text-md font-bold">
+              <span className="text-orange-500 dark:text-yellow-600 text-md font-bold">
                 {weather.date}
               </span>
             </div>
             <div className="flex justify-center mt-0">
-              <span className="text-teal-600 text-3xl">
+              <span className="text-teal-600 dark:text-blue-500 text-3xl">
                 {weather.description}
               </span>
             </div>
-            <div className=" flex flex-row justify-between px-5 mt-10">
-              <div className="flex flex-col item-center">
-                <img src={waterIcon} alt="" className="w-7 h-7" />
-                <div className="flex items-center text-teal-600">
-                  <span className="text-lg">{weather.humidity}</span>
-                  <span className="text-md">%</span>
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <img src={WindSpeedIcon} alt="" className="w-7 h-7" />
-                <div className="flex items-center text-teal-600">
-                  <span className="text-lg">{weather.wind}</span>
-                  <span className="text-md">m/s</span>
+            <div className="flex w-full justify-center">
+              <div className="max-w-md min-w-[400px]">
+                <div className=" flex flex-row justify-between px-5 mt-10">
+                  <div className="flex flex-col item-center">
+                    <img src={waterIcon} alt="" className="w-7 h-7" />
+                    <div className="flex items-center text-teal-600 dark:text-slate-50">
+                      <span className="text-lg">{weather.humidity}</span>
+                      <span className="text-md">%</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <img
+                      src={WindSpeedIcon}
+                      alt=""
+                      className="w-7 h-7"
+                    />
+                    <div className="flex items-center text-teal-600 dark:text-slate-50">
+                      <span className="text-lg">{weather.wind}</span>
+                      <span className="text-md">m/s</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -95,33 +137,43 @@ function App() {
         </div>
 
         <div className="col-span-1 row-span-2 px-5">
-          <div className=" flex flex-row justify-between">
-            <div className="flex item-center">
-              <button
-                onClick={() => setCityModal(true)}
-                className="border-2 border-orange-400 text-white bg-orange-400 rounded-full px-5 py-1"
-              >
-                chose city
-              </button>
-            </div>
-            <div className="flex items-center">
-              <button
-                onClick={handleToDefaultCity}
-                className="border-2 border-orange-400 text-slate-500 rounded-full px-5 py-1"
-              >
-                set default
-              </button>
+          <div className="flex w-full justify-center">
+            <div className="max-w-md min-w-[400px]">
+              <div className=" flex flex-row justify-between  self-center content-center">
+                <div className="flex item-center">
+                  <button
+                    onClick={() => setCityModal(true)}
+                    className="flex justify-center items-center border-2 border-orange-400 dark:border-yellow-600 text-white dark:text-slate-900 bg-orange-400 dark:bg-yellow-600 rounded-full px-5 py-1"
+                  >
+                    <span>chose city</span>
+                  </button>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    onClick={handleGoMyLocation}
+                    className="border-2 border-orange-400 dark:border-yellow-600 text-slate-500 dark:text-slate-50  rounded-full px-5 py-1"
+                  >
+                    my location
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="col-span-1 row-span-1 px-5">
           <div className=" flex flex-row justify-center">
-            <div className="flex item-center">
+            <div className="flex item-center text-slate-800 dark:text-slate-50">
               made with
               <HeartIcon className="w-5 text-red-500" />
-               by
-              <a href="https://ansarmirzayi.ir" className="w-7 text-teal-600 mx-1" > Dev_Ansar </a>
+              by
+              <a
+                href="https://ansarmirzayi.ir"
+                className="w-7 text-teal-600 dark:text-blue-500 mx-1"
+              >
+                {" "}
+                Dev_Ansar{" "}
+              </a>
             </div>
           </div>
         </div>
@@ -226,7 +278,7 @@ const ChoseCityDialog = ({
                           ) : (
                             filteredCities.map((city) => (
                               <Combobox.Option
-                                key={city.id}
+                                key={city.name + city.lat}
                                 className={({ active }) =>
                                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                     active

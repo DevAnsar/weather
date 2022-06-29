@@ -6,13 +6,19 @@ import type {
   WeatherContextInterface,
   WeatherInterface,
 } from "../type";
+import cities from "../db/ir.json";
 
-export const cities: CityInterface[] = [
-  { id: 1, name: "Urmia", lat: "37.5527", lon: "45.0761" },
-  { id: 2, name: "Tehran", lat: "35.6944", lon: "51.4215" },
-];
+// export const cities: CityInterface[] = [
+//   { name: "Urmia", lat: "37.5527", lon: "45.0761" },
+//   { name: "Tehran", lat: "35.6944", lon: "51.4215" },
+// ];
+// console.log(_cities);
 
-export const defaultCity: CityInterface = cities[1];
+export const defaultCity: CityInterface = {
+  name: cities[0].name,
+  lat: cities[0].lat,
+  lon: cities[0].lon,
+};
 
 const initWeather: WeatherInterface = {
   id: 801,
@@ -38,7 +44,7 @@ export const WeatherContext = createContext<WeatherContextInterface>({
 const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [city, setCity] = useLocalStorage<CityInterface>("city",defaultCity);
+  const [city, setCity] = useLocalStorage<CityInterface>("city", defaultCity);
   const [weather, setWeather] = useLocalStorage<WeatherInterface>(
     "weather",
     initWeather
@@ -84,4 +90,5 @@ const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+export { cities };
 export default WeatherProvider;
