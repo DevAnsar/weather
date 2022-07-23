@@ -8,11 +8,7 @@ import {
 import { LocationMarkerIcon } from "@heroicons/react/outline";
 import WindSpeedIcon from "./assets/images/icons/wind_speed.png";
 import waterIcon from "./assets/images/icons/water.png";
-import useWeather, {
-  useCity,
-  useSetCity,
-  cities,
-} from "./hooks/useWeather";
+import useWeather, { useCity, useSetCity, cities } from "./hooks/useWeather";
 import { iconMaker } from "./utils/helper";
 import DarkModeToggleButton from "./components/tools/DarkModeToggleButton";
 import { Dialog, Transition, Combobox } from "@headlessui/react";
@@ -34,6 +30,7 @@ function App() {
 
     function error(err: any) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      alert(err.message);
     }
 
     if (navigator)
@@ -45,10 +42,6 @@ function App() {
             lat: crd.latitude,
             lon: crd.longitude,
           });
-          // console.log('Your current position is:');
-          // console.log(`Latitude : ${crd.latitude}`);
-          // console.log(`Longitude: ${crd.longitude}`);
-          // console.log(`More or less ${crd.accuracy} meters.`);
         },
         error,
         options
@@ -120,11 +113,7 @@ function App() {
                     </div>
                   </div>
                   <div className="flex flex-col items-center">
-                    <img
-                      src={WindSpeedIcon}
-                      alt=""
-                      className="w-7 h-7"
-                    />
+                    <img src={WindSpeedIcon} alt="" className="w-7 h-7" />
                     <div className="flex items-center text-teal-600 dark:text-slate-50">
                       <span className="text-lg">{weather.wind}</span>
                       <span className="text-md">m/s</span>
@@ -240,19 +229,19 @@ const ChoseCityDialog = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white dark:bg-slate-700 p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
+                  className="text-lg font-medium leading-6 text-gray-900 dark:text-slate-50"
                 >
                   Chose city
                 </Dialog.Title>
                 <div className="mt-2">
                   <Combobox value={sc} onChange={setSelectedCity}>
                     <div className="relative mt-1">
-                      <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                      <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white dark:bg-gray-900 text-left shadow-md outline-none sm:text-sm">
                         <Combobox.Input
-                          className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                          className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 bg-white dark:bg-gray-900 text-gray-900 dark:text-slate-50 outline-none"
                           displayValue={(city: { name: string }) => city.name}
                           onChange={(event) => setQuery(event.target.value)}
                         />
@@ -270,9 +259,9 @@ const ChoseCityDialog = ({
                         leaveTo="opacity-0"
                         afterLeave={() => setQuery("")}
                       >
-                        <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-400 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                           {filteredCities.length === 0 && query !== "" ? (
-                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700 dark:text-slate-50">
                               Nothing found.
                             </div>
                           ) : (
@@ -282,8 +271,8 @@ const ChoseCityDialog = ({
                                 className={({ active }) =>
                                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                     active
-                                      ? "bg-teal-600 text-white"
-                                      : "text-gray-900"
+                                      ? "bg-teal-600 text-slate-50"
+                                      : "text-gray-900 dark:text-slate-50"
                                   }`
                                 }
                                 value={city}

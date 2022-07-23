@@ -8,12 +8,6 @@ import type {
 } from "../type";
 import cities from "../db/ir.json";
 
-// export const cities: CityInterface[] = [
-//   { name: "Urmia", lat: "37.5527", lon: "45.0761" },
-//   { name: "Tehran", lat: "35.6944", lon: "51.4215" },
-// ];
-// console.log(_cities);
-
 export const defaultCity: CityInterface = {
   name: cities[0].name,
   lat: cities[0].lat,
@@ -62,7 +56,7 @@ const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
     const { humidity, temp } = data.main;
     const { speed: wind } = data.wind;
 
-    const date = new Date(data.dt).toLocaleDateString("en-us", {
+    const date = new Date().toLocaleDateString("en-us", {
       weekday: "short",
       day: "numeric",
       month: "long",
