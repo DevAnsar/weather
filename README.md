@@ -1,4 +1,4 @@
-# Whather mini React App
+# Weather mini React App
 
 This project was bootstrapped with [React](https://reactjs.org/), [Typescript](https://www.typescriptlang.org/) and [Tailwindcss](https://tailwindcss.com/)
 
